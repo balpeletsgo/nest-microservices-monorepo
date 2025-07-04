@@ -1,0 +1,1 @@
+export const CONTACTS_SERVICE = Symbol('CONTACTS_SERVICE');
