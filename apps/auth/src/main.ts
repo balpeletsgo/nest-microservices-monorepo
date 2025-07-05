@@ -6,6 +6,7 @@ import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const port = Number(process.env.AUTH_SERVICE_PORT) || 3001;
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AuthModule,
     {
@@ -19,7 +20,7 @@ async function bootstrap() {
   await app.listen();
 
   Logger.log(
-    `🚀 Auth service is running on: http://${process.env.HOST ?? 'localhost'}:${port}`,
+    `🚀 Auth service is running on: http://${process.env.AUTH_SERVICE_HOST ?? 'localhost'}:${port}`,
   );
 }
 void bootstrap();
