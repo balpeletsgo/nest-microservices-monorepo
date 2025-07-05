@@ -16,7 +16,6 @@ export class ContactsService {
   ) {}
 
   async create(user: User, request: CreateContactDTO): Promise<ContactDTO> {
-    console.log({ user, request });
     const createContactRequest = this.validation.validate(
       ContactsSchema.CreateContact,
       request,
