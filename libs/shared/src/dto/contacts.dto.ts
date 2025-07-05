@@ -1,14 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-
-export class ContactDto {
+export class ContactDTO {
   id: string;
   name: string;
-  number?: string[];
+  email: string;
 }
 
-export class CreateContactDto {
+export class CreateContactDTO {
   name: string;
-  number?: string[];
+  email: string;
 }
 
-export class UpdateContactDto extends PartialType(CreateContactDto) {}
+export class UpdateContactDTO {
+  name?: string;
+  email?: string;
+}

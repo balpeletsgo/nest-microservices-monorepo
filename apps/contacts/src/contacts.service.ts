@@ -1,25 +1,129 @@
-import { CreateContactDto, UpdateContactDto } from '@app/shared/dto';
-import { Injectable } from '@nestjs/common';
+import { PrismaService, ValidationService } from '@app/common';
+import {
+  ContactDTO,
+  CreateContactDTO,
+  UpdateContactDTO,
+} from '@app/shared/dto';
+import { ContactsSchema } from '@app/shared/schemas';
+import { HttpException, Injectable } from '@nestjs/common';
+import { User } from 'generated/prisma';
 
 @Injectable()
 export class ContactsService {
-  create(createContactDto: CreateContactDto) {
-    return 'This action adds a new contact';
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly validation: ValidationService,
+  ) {}
+
+  async create(user: User, request: CreateContactDTO): Promise<ContactDTO> {
+    console.log({ user, request });
+    const createContactRequest = this.validation.validate(
+      ContactsSchema.CreateContact,
+      request,
+    );
+
+    return this.prismaService.contact.create({
+      data: {
+        name: createContactRequest.name,
+        email: createContactRequest.email,
+        userId: user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all contacts`;
+  async findAll(user: User): Promise<ContactDTO[]> {
+    return this.prismaService.contact.findMany({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
+  async findOne(user: User, id: string): Promise<ContactDTO> {
+    const contact = await this.prismaService.contact.findUnique({
+      where: {
+        id,
+        userId: user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+
+    if (!contact) {
+      throw new HttpException('Contact not found', 404);
+    }
+
+    return contact;
   }
 
-  update(id: number, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
+  async update(user: User, id: string, request: UpdateContactDTO) {
+    const updateContactRequest = this.validation.validate(
+      ContactsSchema.UpdateContact,
+      {
+        ...request,
+        id,
+      },
+    );
+
+    const contact = await this.prismaService.contact.findUnique({
+      where: {
+        id: updateContactRequest.id,
+        userId: user.id,
+      },
+    });
+
+    if (!contact) {
+      throw new HttpException('Contact not found', 404);
+    }
+
+    return this.prismaService.contact.update({
+      where: {
+        id: updateContactRequest.id,
+        userId: user.id,
+      },
+      data: {
+        ...updateContactRequest,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} contact`;
+  async delete(user: User, id: string) {
+    const contact = await this.prismaService.contact.findUnique({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
+
+    if (!contact) {
+      throw new HttpException('Contact not found', 404);
+    }
+
+    return this.prismaService.contact.delete({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
   }
 }

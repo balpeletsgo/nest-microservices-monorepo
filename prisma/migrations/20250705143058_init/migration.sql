@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "users" (
-    "id" UUID NOT NULL,
+    "id" VARCHAR(100) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "password" VARCHAR(100) NOT NULL,
     "name" VARCHAR(255) NOT NULL,
@@ -12,23 +12,23 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "contacts" (
-    "id" UUID NOT NULL,
+    "id" VARCHAR(100) NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "userId" UUID NOT NULL,
+    "userId" VARCHAR(100) NOT NULL,
 
     CONSTRAINT "contacts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "phones" (
-    "id" UUID NOT NULL,
+    "id" VARCHAR(100) NOT NULL,
     "number" VARCHAR(20) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "contactId" UUID NOT NULL,
+    "contactId" VARCHAR(100) NOT NULL,
 
     CONSTRAINT "phones_pkey" PRIMARY KEY ("id")
 );
