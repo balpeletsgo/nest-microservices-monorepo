@@ -39,14 +39,15 @@ export class ContactsService {
   async findAll(user: User): Promise<ContactDTO[]> {
     return this.prismaService.contact.findMany({
       where: {
-        user: {
-          id: user.id,
-        },
+        userId: user.id,
       },
       select: {
         id: true,
         name: true,
         email: true,
+      },
+      orderBy: {
+        name: 'asc',
       },
     });
   }
