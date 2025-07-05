@@ -16,10 +16,11 @@ import {
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
+import { AUTH_SERVICE } from './constant';
 
 @Controller('auth')
 export class AuthController {
-  constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) {}
+  constructor(@Inject(AUTH_SERVICE) private authClient: ClientProxy) {}
 
   @Post('sign_up')
   @HttpCode(HttpStatus.CREATED)
