@@ -46,6 +46,15 @@
         "tsConfigPath": "apps/contacts/tsconfig.app.json"
       }
     },
+    "phone": {
+      "type": "application",
+      "root": "apps/phone",
+      "entryFile": "main",
+      "sourceRoot": "apps/phone/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/phone/tsconfig.app.json"
+      }
+    },
     "shared": {
       "type": "library",
       "root": "libs/shared",

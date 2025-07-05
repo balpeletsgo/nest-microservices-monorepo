@@ -1,7 +1,10 @@
+import { PhoneDTO } from './phone.dto';
+
 export class ContactDTO {
   id: string;
   name: string;
   email: string;
+  phone?: PhoneDTO[];
 }
 
 export class CreateContactDTO {

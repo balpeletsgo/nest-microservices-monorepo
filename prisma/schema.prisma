@@ -43,13 +43,13 @@ model Contact {
 
 model Phone {
   id        String   @id @default(uuid()) @db.VarChar(100)
-  number    String   @db.VarChar(20)
+  phone     String   @db.VarChar(20)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   contactId String  @db.VarChar(100)
   contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
 
-  @@unique([number])
+  @@unique([phone])
   @@map("phones")
 }

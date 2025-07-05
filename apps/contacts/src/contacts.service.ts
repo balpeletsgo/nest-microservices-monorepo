@@ -61,6 +61,12 @@ export class ContactsService {
         id: true,
         name: true,
         email: true,
+        Phone: {
+          select: {
+            id: true,
+            phone: true,
+          },
+        },
       },
     });
 
