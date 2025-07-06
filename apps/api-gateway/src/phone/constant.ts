@@ -1,1 +1,0 @@
-export const PHONE_SERVICE = 'PHONE_SERVICE';

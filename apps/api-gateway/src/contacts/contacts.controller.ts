@@ -1,7 +1,12 @@
 import { JwtAuthGuard } from '@app/common/guards';
 import { UserRequest } from '@app/common/interface';
 import { MicroserviceErrorHandler } from '@app/common/utils';
-import { WebResponseDTO } from '@app/shared/dto';
+import {
+  CreatePhoneDTO,
+  PhoneDTO,
+  UpdatePhoneDTO,
+  WebResponseDTO,
+} from '@app/shared/dto';
 import {
   ContactDTO,
   CreateContactDTO,
@@ -149,6 +154,98 @@ export class ContactsController {
       success: true,
       status: 200,
       message: 'Contact removed successfully',
+    };
+  }
+
+  @Post(':contactId/phones')
+  @HttpCode(HttpStatus.CREATED)
+  async createPhone(
+    @Param('contactId') contactId: string,
+    @Body() body: CreatePhoneDTO,
+  ): Promise<WebResponseDTO<PhoneDTO>> {
+    const result = await lastValueFrom(
+      MicroserviceErrorHandler.handleMicroserviceResponse(
+        this.contactsClient.send<PhoneDTO>(CONTACTS_PATTERNS.CREATE_PHONE, {
+          contactId,
+          body,
+        }),
+      ),
+    );
+
+    return {
+      success: true,
+      status: 201,
+      message: 'Phone created successfully',
+      data: result,
+    };
+  }
+
+  @Get(':contactId/phones/:phoneId')
+  async findOnePhone(
+    @Param('contactId') contactId: string,
+    @Param('phoneId') phoneId: string,
+  ): Promise<WebResponseDTO<PhoneDTO>> {
+    const result = await lastValueFrom(
+      MicroserviceErrorHandler.handleMicroserviceResponse(
+        this.contactsClient.send<PhoneDTO>(CONTACTS_PATTERNS.FIND_ONE_PHONE, {
+          contactId,
+          phoneId,
+        }),
+      ),
+    );
+
+    return {
+      success: true,
+      status: 200,
+      message: 'Phone retrieved successfully',
+      data: result,
+    };
+  }
+
+  @Patch(':contactId/phones/:phoneId')
+  @HttpCode(HttpStatus.OK)
+  async updatePhone(
+    @Param('contactId') contactId: string,
+    @Param('phoneId') phoneId: string,
+    @Body() body: UpdatePhoneDTO,
+  ): Promise<WebResponseDTO<PhoneDTO>> {
+    const result = await lastValueFrom(
+      MicroserviceErrorHandler.handleMicroserviceResponse(
+        this.contactsClient.send<PhoneDTO>(CONTACTS_PATTERNS.UPDATE_PHONE, {
+          contactId,
+          phoneId,
+          body,
+        }),
+      ),
+    );
+
+    return {
+      success: true,
+      status: 200,
+      message: 'Phone updated successfully',
+      data: result,
+    };
+  }
+
+  @Delete(':contactId/phones/:phoneId')
+  @HttpCode(HttpStatus.OK)
+  async deletePhone(
+    @Param('contactId') contactId: string,
+    @Param('phoneId') phoneId: string,
+  ): Promise<WebResponseDTO<void>> {
+    await lastValueFrom(
+      MicroserviceErrorHandler.handleMicroserviceResponse(
+        this.contactsClient.send(CONTACTS_PATTERNS.REMOVE_PHONE, {
+          contactId,
+          phoneId,
+        }),
+      ),
+    );
+
+    return {
+      success: true,
+      status: 200,
+      message: 'Phone removed successfully',
     };
   }
 }

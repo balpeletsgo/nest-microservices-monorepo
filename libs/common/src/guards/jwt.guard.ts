@@ -46,7 +46,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       });
 
       req.user = {
-        id: user.id,
+        id: user!.id,
       };
 
       return true;
